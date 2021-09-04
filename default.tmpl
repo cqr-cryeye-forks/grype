@@ -1,0 +1,21 @@
+[
+{{- range .Matches}}
+{
+"package": "{{.Artifact.Name}}",
+"version_installed": "{{.Artifact.Version}}",
+"language": "{{.Artifact.Language}}",
+"locations": [
+    {{- range .Artifact.Locations}}
+        {
+        "path": "{{.RealPath}}"
+        },
+    {{- end}}
+        {}
+],
+"type": "{{.Artifact.Type}}",
+"vulnerability_id": "{{.Vulnerability.ID}}",
+"severity": "{{.Vulnerability.Severity}}"
+},
+{{- end}}
+{}
+]

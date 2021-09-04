@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
+	"os"
 	"reflect"
 	"text/template"
 
@@ -61,6 +63,19 @@ func (pres *Presenter) Present(output io.Writer) error {
 	document, err := models.NewDocument(pres.packages, pres.context, pres.matches, pres.metadataProvider, pres.appConfig, pres.dbStatus)
 	if err != nil {
 		return err
+	}
+
+	// write to file output.json
+	// create file
+	path := "/tmp/output.json"
+	f, err := os.Create(path)
+	if err != nil {
+		log.Fatalf("An error ocured while creating new file: %s. Error: %v", path, err)
+	}
+
+	err = tmpl.Execute(f, document)
+	if err != nil {
+		return fmt.Errorf("unable to execute supplied template: %w", err)
 	}
 
 	err = tmpl.Execute(output, document)
